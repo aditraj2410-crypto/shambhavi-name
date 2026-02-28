@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Shambhavi</title>
+
+<style>
+/* ===================== GLOBAL ===================== */
+*{box-sizing:border-box;}
+body{
+    margin:0;
+    font-family:"Segoe UI",sans-serif;
+    background:linear-gradient(135deg,#6dd5ed,#fbd786);
+    color:#fff;
+    overflow:hidden;
+    text-align:center;
+}
+.screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+.screen.active{display:flex;}
+
+h1,h2,h3,p{margin:10px 0;}
+
+button{
+    padding:12px 30px;
+    border:none;
+    border-radius:30px;
+    background:#fff;
+    color:#333;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:20px;
+}
+
+img,video{
+    max-width:90%;
+    max-height:60vh;
+    border-radius:18px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.4);
+}
+
+/* ===================== ANIMATIONS ===================== */
+.fade{animation:fadeIn 1.6s forwards;}
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.falling{
+    position:fixed;
+    top:-20px;
+    font-size:20px;
+    animation:fall linear infinite;
+    pointer-events:none;
+}
+@keyframes fall{
+    to{transform:translateY(110vh);}
+}
+
+.text-box{
+    max-width:760px;
+    line-height:1.8;
+    text-align:left;
+    background:rgba(0,0,0,0.25);
+    padding:25px;
+    border-radius:18px;
+}
+
+/* ===================== ENVELOPE ===================== */
+.envelope-wrap{
+    position:relative;
+    width:240px;
+    height:160px;
+    cursor:pointer;
+}
+.envelope{
+    position:absolute;
+    inset:0;
+    background:#fff;
+    border-radius:10px;
+}
+.envelope:before{
+    content:"";
+    position:absolute;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:#f0f0f0;
+    clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);
+}
+.envelope span{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#333;
+    font-weight:bold;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC (starts only after click) -->
+<audio id="bgMusic" src="assets/music.mp3" loop></audio>
+
+<!-- ===================== SCREEN 1 : INTRO ===================== -->
+<div id="s1" class="screen active">
+    <h1 class="fade">Shambhavi…</h1>
+    <p class="fade">Someone made something special for you 💛</p>
+    <button onclick="startExperience()">Yes 💛</button>
+</div>
+
+<!-- ===================== SCREEN 2 : BIRTHDAY ===================== -->
+<div id="s2" class="screen">
+    <h1>HAPPY 18TH BIRTHDAY SHAMBHAVI 🎂</h1>
+    <h3>AB TU BADI HO GAYI HAIIII 😂😁</h3>
+    <button onclick="showScreen('s3')">Let’s celebrate 🎈</button>
+</div>
+
+<!-- ===================== SCREEN 3 : CAKE ===================== -->
+<div id="s3" class="screen">
+    <h2>Birthday girl deserves the first bite 🎂</h2>
+    <button onclick="showScreen('s4')">Cut the cake</button>
+</div>
+
+<!-- ===================== SCREEN 4 : MEMORY SLIDESHOW ===================== -->
+<div id="s4" class="screen">
+    <div id="memoryBox"></div>
+    <p id="memoryCaption"></p>
+    <button onclick="nextMemory()">Next</button>
+</div>
+
+<!-- ===================== SCREEN 5 : OPTIONS ===================== -->
+<div id="s5" class="screen">
+    <h2>What do you want to see first? 😊</h2>
+    <p>You’ll get to see both 💛</p>
+    <button onclick="openFirstMessage()">💬 First Message</button>
+    <button onclick="openMemoriesText()">📸 Memories</button>
+</div>
+
+<!-- ===================== SCREEN 6 : FIRST MESSAGE ===================== -->
+<div id="s6" class="screen">
+    <div class="text-box">
+        <h3>💬 The First Message</h3>
+        <p>
+        You remember the very first message I sent?<br><br>
+
+        <i>“Hey Shambhavi… this might be a bit random, but I thought I should say hi.”</i><br><br>
+
+        And funny thing is… you didn’t even see that message at first 😭<br>
+        Then <b>Aarya said</b> something to you, and suddenly you replied…<br><br>
+
+        And that small “hi” slowly turned into conversations, comfort, laughter, and chaos.<br><br>
+
+        I never imagined that in such a short time — barely two months —<br>
+        we’d reach a stage where talking to you feels this easy, this natural.<br><br>
+
+        From one random message to something that genuinely feels special…<br>
+        you are honestly amazing, yaar 💛
+        </p>
+    </div>
+    <button onclick="nextAfterFirst()">Next</button>
+</div>
+
+<!-- ===================== SCREEN 7 : MEMORIES TEXT ===================== -->
+<div id="s7" class="screen">
+    <div class="text-box">
+        <h3>📸 Memories</h3>
+        <p>
+        I still remember our first meet so clearly.<br>
+        You coming near me when I got down from the auto —<br>
+        that first real-life “hey” in front of your college.<br><br>
+
+        Then BMS college…<br>
+        no information achieved, but a lot of talking done 😄<br><br>
+
+        Forum Mall after that —<br>
+        and you even sacrificed your sleep for that day.<br>
+        Thank you for that, really.<br><br>
+
+        And then later…<br>
+        the bakchodi, the teasing, the boating,<br>
+        you getting scared of water snakes and spiders —<br>
+        pagal kahin ki, literally jumping around 😂<br><br>
+
+        Every second spent with you felt light, fun, and genuinely happy.<br>
+        It’s honestly lovely spending time with you 💛
+        </p>
+    </div>
+    <button onclick="nextAfterMemories()">Next</button>
+</div>
+
+<!-- ===================== SCREEN 8 : ENVELOPE ===================== -->
+<div id="s8" class="screen">
+    <img src="assets/envelope.jpg" style="opacity:0.4"><br><br>
+    <div class="envelope-wrap" onclick="showScreen('s9')">
+        <div class="envelope">
+            <span>HBD GUNGUN 💌<br>From Aditya</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SCREEN 9 : BIG ENVELOPE MESSAGE ===================== -->
+<div id="s9" class="screen">
+    <div class="text-box">
+        <b>HAPPY BIRTHDAY SHAMBHAVI ❤️❤️</b><br><br>
+
+        I honestly can’t forget how we even started talking.<br>
+        That one random beginning, those first few conversations… I never imagined they would turn into <i>this</i>.<br>
+        From small talks to laughing endlessly, from awkward beginnings to pure comfort — it all happened so naturally.<br><br>
+
+        As you step into this new year of your life, I genuinely wish that all your dreams slowly start coming true ✨<br>
+        May you smile more, stress less, and always keep that spark that makes you <i>you</i>.<br>
+        And yes — whenever you need me, I’ll be there for you. Always. 💙<br><br>
+
+        Also… can we just talk about how pretty you are?<br>
+        Not just looks — but the way you talk, the way you react, the way you laugh at random things.<br>
+        Sometimes sweet, sometimes crazy, sometimes dramatic 😌<br>
+        Perfect combination, honestly.<br><br>
+
+        We’ve spent so much time together in such a short span — and still, it feels like there’s never a boring moment.<br>
+        Every second, every conversation, every random bakchodi… I never thought we’d get this close this fast.<br>
+        But here we are.<br><br>
+
+        You know what’s funny?<br>
+        Now you’ve become that person I <i>want</i> to talk to every day.<br>
+        Talking to you feels easy, fun, and comforting all at once.<br>
+        The vibe is just… really good. 💛<br>
+        And I genuinely enjoy it. A lot.<br><br>
+
+        So once again — happy birthday to someone who unknowingly made my days a little better.<br>
+        I’m really glad I met you, Shambhavi ❤️
+    </div>
+    <button onclick="showScreen('s10')">Message Read 💛</button>
+</div>
+
+<!-- ===================== SCREEN 10 : FINAL ===================== -->
+<div id="s10" class="screen">
+    <img src="assets/final.jpg"><br><br>
+    <h3>Once again, Happy 18th Birthday Shambhavi 💛</h3>
+    <p>I would love to make more memories with you…<br>only if you want 😊</p>
+    <button>Let’s see where this goes 💛</button>
+</div>
+
+<script>
+/* ===================== MUSIC & START ===================== */
+function startExperience(){
+    document.getElementById("bgMusic").play();
+    showScreen("s2");
+}
+
+/* ===================== SCREEN SWITCH ===================== */
+function showScreen(id){
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+/* ===================== MEMORY SLIDESHOW ===================== */
+let memIndex = 0;
+const memories = [
+ {type:"img",src:"assets/memory1.jpg",cap:""},
+ {type:"img",src:"assets/memory2.jpg",cap:""},
+ {type:"img",src:"assets/memory3.jpg",cap:"Pagli hai kya 😂😂"},
+ {type:"video",src:"assets/memory.mp4"}
+];
+
+function nextMemory(){
+    if(memIndex >= memories.length){
+        showScreen("s5");
+        return;
+    }
+    const box = document.getElementById("memoryBox");
+    const cap = document.getElementById("memoryCaption");
+    box.innerHTML=""; cap.innerHTML="";
+    const m = memories[memIndex];
+    if(m.type==="img"){
+        const i=document.createElement("img");
+        i.src=m.src;
+        box.appendChild(i);
+        cap.innerHTML=m.cap || "";
+    }else{
+        const v=document.createElement("video");
+        v.src=m.src;
+        v.autoplay=true;
+        v.muted=true;
+        v.playsInline=true;
+        box.appendChild(v);
+    }
+    memIndex++;
+}
+
+/* ===================== OPTION LOGIC ===================== */
+let seenFirst=false, seenMem=false;
+
+function openFirstMessage(){
+    seenFirst=true;
+    showScreen("s6");
+}
+function openMemoriesText(){
+    seenMem=true;
+    showScreen("s7");
+}
+function nextAfterFirst(){
+    if(!seenMem){ openMemoriesText(); }
+    else{ showScreen("s8"); }
+}
+function nextAfterMemories(){
+    if(!seenFirst){ openFirstMessage(); }
+    else{ showScreen("s8"); }
+}
+
+/* ===================== FALLING EFFECT ===================== */
+setInterval(()=>{
+    const e=document.createElement("div");
+    e.className="falling";
+    e.innerText=["💛","💙","🌸","🎈"][Math.floor(Math.random()*4)];
+    e.style.left=Math.random()*100+"vw";
+    e.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),7000);
+},500);
+</script>
+
+</body>
+</html>
